@@ -1,0 +1,185 @@
+1. Recursos necessários
+1.1. Programas e tecnologias
+Recurso  	                               Finalidade
+Windows 10/11	                           Sistema operacional recomendado
+Visual Studio Code	                     Editor de código (opcional, mas recomendado)
+Node.js	                                 Executar o backend
+npm	                                     Instalar as dependências do projeto
+PostgreSQL	                             Armazenar os equipamentos
+pgAdmin 4	                               Administrar o PostgreSQL
+MongoDB Community Server	               Armazenar as manutenções
+mongosh	                                 Executar comandos no MongoDB
+Neo4j Community Edition	                 Armazenar os relacionamentos
+Navegador (Chrome, Edge ou Firefox)	     Acessar o sistema
+Git ou download ZIP do GitHub	           Obter os arquivos do projeto
+
+1.2. Dependências do backend
+O backend utiliza Node.js com Express e os seguintes pacotes:
+Pacote	        Finalidade
+express	        Criar a API e gerenciar requisições HTTP
+pg	            Conectar ao PostgreSQL
+mongodb	        Conectar ao MongoDB
+neo4j-driver	  Conectar ao Neo4j
+cors	          Permitir comunicação entre frontend e backend
+dotenv	        Carregar configurações do arquivo .env
+
+Essas dependências ficam registradas no arquivo backend/package.json e são instaladas com:
+npm install
+
+2. Estrutura necessária do projeto
+Depois de baixar e extrair o projeto do GitHub, a estrutura deverá ser:
+MedTech/
+│
+├── backend/
+│   ├── database/
+│   │   ├── postgres.js
+│   │   ├── mongo.js
+│   │   └── neo4j.js
+│   │
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── database-scripts/
+│   ├── postgresql.sql
+│   ├── mongodb.js
+│   ├── neo4j.cypher
+│   └── README.md
+│
+├── .gitignore
+└── README.md
+
+
+3. Configuração dos bancos de dados
+Os três bancos precisam estar instalados e em execução antes de iniciar o backend.
+3.1. PostgreSQL e pgAdmin 4
+Finalidade: armazenar os dados estruturados dos equipamentos médicos.
+
+Procedimentos:
+1. Instalar o PostgreSQL.
+2. Instalar ou utilizar o pgAdmin 4.
+3. Criar o banco de dados chamado Medtech.
+4. Abrir o Query Tool no pgAdmin.
+5. Executar o arquivo database-scripts/postgresql.sql.
+Ao final, deverá existir a tabela:
+equipamentos
+├── id
+├── nome
+├── fabricante
+├── modelo
+├── numero_serie
+├── data_aquisicao
+├── status
+└── criado_em
+
+
+Porta padrão: 5432
+3.2. MongoDB
+Finalidade: armazenar as informações das manutenções técnicas.
+
+Procedimentos:
+1. Instalar o MongoDB Community Server.
+2. Instalar o MongoDB Shell (mongosh), caso não esteja incluído.
+3. Iniciar o serviço do MongoDB.
+4. Executar o arquivo database-scripts/mongodb.js pelo terminal:
+mongosh --file database-scripts/mongodb.js
+
+
+Será criado o banco MedTech, com a coleção manutencoes.
+
+Porta padrão: 27017
+3.3. Neo4j
+Finalidade: representar as relações entre equipamentos e manutenções.
+
+Procedimentos:
+1. Instalar o Neo4j Community Edition.
+2. Criar ou iniciar uma instância do banco.
+3. Definir usuário e senha.
+4. Iniciar o serviço.
+5. Acessar o Neo4j Browser.
+6. Executar o arquivo database-scripts/neo4j.cypher.
+O banco deverá permitir a representação:
+(Equipamento)-[TEVE_MANUTENCAO]->(Manutencao)
+
+Porta Bolt padrão: 7687
+
+4. Configuração do backend
+Depois de instalar e configurar os bancos:
+1. Abrir a pasta MedTech no computador.
+2. Abrir um terminal dentro da pasta backend.
+3. Instalar as dependências:
+npm install
+4. Criar o arquivo .env dentro de backend.
+5. Configurar os dados de conexão dos três bancos.
+O arquivo deverá conter as informações necessárias para conexão, como:
+- Host e porta do PostgreSQL.
+- Nome do banco, usuário e senha do PostgreSQL.
+- URL de conexão do MongoDB.
+- URL Bolt, usuário e senha do Neo4j.
+- Porta do servidor Express, caso configurada por variável de ambiente.
+Importante: os nomes das variáveis precisam ser exatamente os utilizados nos arquivos postgres.js, mongo.js, neo4j.js e server.js. Não é seguro inventar nomes diferentes, pois isso pode impedir a conexão.
+
+6. Iniciar o backend:
+npm run dev
+
+Se tudo estiver configurado corretamente, o servidor deverá iniciar em:
+http://localhost:3000
+
+5. Execução do frontend
+O frontend utiliza:
+- HTML para estruturar as telas.
+- CSS para definir a aparência.
+- JavaScript para realizar as requisições à API.
+Não é necessário instalar um servidor frontend separado, considerando a configuração registrada do projeto, na qual o Express disponibiliza os arquivos estáticos.
+
+Basta abrir no navegador:
+
+http://localhost:3000/
+6. Ordem correta de inicialização
+1. Instalar e iniciar os bancos de dados
+   
+   PostgreSQL, MongoDB e Neo4j.
+2. Criar e configurar os bancos
+   
+   Executar os scripts SQL, JavaScript e Cypher.
+3. Configurar o backend
+   
+   Criar o .env e executar npm install.
+4. Iniciar a API
+   
+   Executar npm run dev na pasta backend.
+5. Abrir o sistema
+   
+   Acessar http://localhost:3000/ pelo navegador.
+
+7. Verificações para garantir a execução
+Antes de considerar a instalação concluída, verificar:
+Verificação	Resultado esperado
+PostgreSQL	Serviço ativo e banco Medtech acessível
+MongoDB	Serviço ativo e banco MedTech acessível
+Neo4j	Instância ativa e conexão Bolt funcionando
+Backend	API iniciada na porta 3000
+Frontend	Página inicial carregada
+Equipamentos	Cadastro, consulta, edição e exclusão
+Manutenções	Cadastro, consulta, edição e exclusão
+Relacionamentos	Criação, consulta, edição e exclusão dos vínculos
+
+8. Configurações de conexão e portas
+Para evitar erros de conexão, confira as configurações utilizadas pelo projeto:
+Serviço	Endereço local	Porta
+PostgreSQL	localhost	5432
+MongoDB	localhost	27017
+Neo4j Bolt	localhost	7687
+Backend Express	localhost	3000
+
+Os nomes dos bancos também devem ser respeitados:
+- PostgreSQL: Medtech.
+- MongoDB: MedTech.
+- Neo4j: instância neo4j.
+
+Conclusão: o projeto precisa de quatro componentes principais para funcionar: frontend, backend, PostgreSQL, MongoDB e Neo4j. O Node.js faz a integração entre a aplicação e os três bancos, enquanto o navegador permite a interação do usuário.
